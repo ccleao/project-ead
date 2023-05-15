@@ -20,11 +20,12 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-@RestController
 @Log4j2
+@RestController
 @RequestMapping("/courses")
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class CourseController {
@@ -51,6 +52,7 @@ public class CourseController {
         log.info("Course saved successfully courseId {} ", courseModel.getCourseId());
         return ResponseEntity.status(HttpStatus.CREATED).body(courseModel);
     }
+
     @DeleteMapping("/{courseId}")
     public ResponseEntity<Object> deleteCourse(@PathVariable(value="courseId") UUID courseId){
         log.debug("DELETE deleteCourse courseId received {} ", courseId);
@@ -90,7 +92,8 @@ public class CourseController {
                                                            @PageableDefault(page = 0, size = 10, sort = "courseId", direction = Sort.Direction.ASC) Pageable pageable,
                                                            @RequestParam(required = false) UUID userId){
         if(userId != null){
-            return ResponseEntity.status(HttpStatus.OK).body(courseService.findAll(SpecificationTemplate.courseUserId(userId).and(spec), pageable));
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(courseService.findAll(SpecificationTemplate.courseUserId(userId).and(spec), pageable));
         } else {
             return ResponseEntity.status(HttpStatus.OK).body(courseService.findAll(spec, pageable));
         }
@@ -105,4 +108,3 @@ public class CourseController {
         return ResponseEntity.status(HttpStatus.OK).body(courseModelOptional.get());
     }
 }
-

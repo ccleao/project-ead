@@ -1,5 +1,6 @@
 package com.ead.course.models;
 
+
 import com.ead.course.enums.CourseLevel;
 import com.ead.course.enums.CourseStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -14,6 +15,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.UUID;
+
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
@@ -51,12 +53,11 @@ public class CourseModel implements Serializable {
     private Set<ModuleModel> modules;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @OneToMany(mappedBy = "course", fetch = FetchType.LAZY)
-    private Set<CourseUserModel> coursesUsers;
-
-    public CourseUserModel convertToCourseUserModel(UUID userId){
-        return new CourseUserModel(null, this, userId);
-    }
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(    name = "TB_COURSES_USERS",
+            joinColumns = @JoinColumn(name = "course_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private Set<UserModel> users;
 
 
 }

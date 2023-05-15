@@ -1,3 +1,4 @@
+
 server:
   port: 8082
   servlet:
@@ -7,7 +8,7 @@ spring:
   application:
     name: ead-course-service
   datasource:
-    url: jdbc:postgresql://localhost:5432/ead-course
+    url: jdbc:postgresql://localhost:5432/ead-authuser-v2
     username: postgres
     password: admin
   jpa:
@@ -22,6 +23,9 @@ spring:
   output:
     ansi:
       enabled: Always
+  rabbitmq:
+    addresses: amqps://uajuvxvb:5o-IwkKezYl2QqxbFBAZULtXB47Kit34@woodpecker.rmq.cloudamqp.com/uajuvxvb
+
 
 logging:
   level:
@@ -34,6 +38,12 @@ ead:
   api:
     url:
       authuser: 'http://ead-authuser-service/ead-authuser'
+  broker:
+    exchange:
+      userEventExchange: ead.userevent
+    queue:
+      userEventQueue:
+        name: ead.userevent.ms.course
 
 eureka:
   client:
@@ -41,8 +51,3 @@ eureka:
       defaultZone: 'http://localhost:8761/eureka'
   instance:
     hostname: localhost
-
-
-
-
-
